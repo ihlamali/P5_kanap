@@ -5,48 +5,48 @@ const page = document.location.href;
 //----------------------------------------------------------------
 // appel de la ressource api product (voir script.js) si on est sur la page panier
 if (page.match("cart")) {
-fetch("http://localhost:3000/api/products")
-  .then((res) => res.json())
-  .then((objetProduits) => {
-      console.log(objetProduits);
+    fetch("http://localhost:3000/api/products")
+.then((res) => res.json())
+.then((objetProduits) => {
+    console.log(objetProduits);
       // appel de la fonction affichagePanier
-      affichagePanier(objetProduits);
-  })
-  .catch((err) => {
-      document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
-      console.log("erreur 404, sur ressource api: " + err);
-  });
+    affichagePanier(objetProduits);
+})
+    .catch((err) => {
+    document.querySelector("#cartAndFormContainer").innerHTML = "<h1>erreur 404</h1>";
+    console.log("erreur 404, sur ressource api: " + err);
+});
 } else {
-  console.log("sur page confirmation");
+console.log("sur page confirmation");
 }
 //--------------------------------------------------------------
 // Fonction détermine les conditions d'affichage des produits du panier
 //--------------------------------------------------------------
 function affichagePanier(index) {
   // on récupère le panier converti
-  let panier = JSON.parse(localStorage.getItem("panierStocké"));
+let panier = JSON.parse(localStorage.getItem("panierStocké"));
   // si il y a un panier avec une taille differante de 0 (donc supérieure à 0)
-   if (panier && panier.length != 0) {
+    if (panier && panier.length != 0) {
     // zone de correspondance clef/valeur de l'api et du panier grâce à l'id produit choisit dans le localStorage
     for (let choix of panier) {
-      console.log(choix);
-      for (let g = 0, h = index.length; g < h; g++) {
+    console.log(choix);
+    for (let g = 0, h = index.length; g < h; g++) {
         if (choix._id === index[g]._id) {
           // création et ajout de valeurs à panier qui vont servir pour les valeurs dataset
-          choix.name = index[g].name;
-          choix.prix = index[g].price;
-          choix.image = index[g].imageUrl;
-          choix.description = index[g].description;
-          choix.alt = index[g].altTxt;
+        choix.name = index[g].name;
+        choix.prix = index[g].price;
+        choix.image = index[g].imageUrl;
+        choix.description = index[g].description;
+        choix.alt = index[g].altTxt;
         }
-      }
+    }
     }
     // on joue affiche,  panier a des clefs/valeurs ajoutés que l'on a pas remonté dans le local storage et sont pourtant réèlles
     // ici panier à les valeurs du local storage + les valeurs définies au dessus
     //on demande à affiche() de jouer avec les données panier 
     //les valeurs ajoutés à panier ont un scope agrandi puisque appelé via la fonction affiche() d'ailleur dans affiche() il n'y a pas d'appel à panier de local storage.
     affiche(panier);
-  } else {
+} else {
     // si il n'y a pas de panier on créait un H1 informatif et quantité appropriées
     document.querySelector("#totalQuantity").innerHTML = "0";
     document.querySelector("#totalPrice").innerHTML = "0";
@@ -350,10 +350,10 @@ function couleurRegex(regSearch, valeurEcoute, inputAction) {
     inputAction.style.backgroundColor = "rgb(220, 50, 50)";
     inputAction.style.color = "white";
     // pour le reste des cas (quand la regex ne décèle aucune erreur et est à 0 peu importe le champ vu qu'il est validé par la regex)
-  } else {
+} else {
     inputAction.style.backgroundColor = "rgb(0, 138, 0)";
     inputAction.style.color = "white";
-  }
+}
 }
 //--------------------------------------------------------------
 // fonction d'affichage individuel des paragraphes sous input sauf pour l'input email
@@ -373,10 +373,10 @@ function texteInfo(regex, pointage, zoneEcoute) {
         document.querySelector(pointage).innerHTML = "Reformulez cette donnée";
         document.querySelector(pointage).style.color = "white";
         // pour le reste des cas (quand la regex ne décèle aucune erreur et est à 0 peu importe le champ vu qu'il est validé par la regex)
-      } else {
-      document.querySelector(pointage).innerHTML = "Caratères acceptés pour ce champ.";
-      document.querySelector(pointage).style.color = "white";
-      }
+    } else {
+    document.querySelector(pointage).innerHTML = "Caratères acceptés pour ce champ.";
+    document.querySelector(pointage).style.color = "white";
+    }
     });
   }
 }

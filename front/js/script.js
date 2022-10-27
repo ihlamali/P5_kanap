@@ -1,60 +1,3 @@
-
-/*
-document.addEventListener("DOMcontentLoaded", function() 
-  {
-
-
-
-
-  //Fonction Principale//
-
-
-  async function main(){
-    let products = await GetProducts();
-    for(let article of products) {
-      displayProducts(article);
-    }
-  }
-  main();
-  
-  //----Fonction d'intérrogation de notre api avec product----//
-
-
-async function GetProducts(){
-  return fetch("http://localhost:3000/api/products")
-  .then(function(res){
-    console.log(products);
-    return res.json();
-  
-  })
-  .catch (function(error){
-    console.log(error)
-  
-  });
-}
-///----fonction d'affichage du produit ----------------///
-
- function displayProducts(products){
-  //Récupération du parent .//
-  const Dom = document.getElementById("items");
-
-  //insert dans le html.//
-
-  Dom.insertAdjacentHTML(
-    "beforeend",
-    `<a href="./product.html?id=${products._id }">
-    <article>
-    <img src="${products.imagUrl}" alt="${products.altTxt}">
-    <h3 class="productName">${products.name}</h3>
-    <p class="productDescription">${products.description}</P>
-    </article>
-    </a>
-    `
-  );
- }
-
-});*/
-
 //------------------------------------------------------------------------
 // Récupération des produits de l'api
 //------------------------------------------------------------------------ 
@@ -87,7 +30,7 @@ function lesKanaps(index) {
     /* création et ajout des zones d'articles, insertion de l'adresse produit via chemin produit + paramètres(son id);
     la page index est http://127.0.0.1:5500/front/html/index.html donc la page du produit sera http://127.0.0.1:5500/front/html/product.html 
     (d'ou le ./product.html) pour rajouter son paramètre on met ? puis la clé (ici _id) associé (=) à sa valeur dynamique ${article._id} */
-    
+
     zoneArticle.innerHTML += `<a href="./product.html?_id=${article._id}">
     <article>
         <img src="${article.imageUrl}" alt="${article.altTxt}">
