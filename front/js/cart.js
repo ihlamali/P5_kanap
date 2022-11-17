@@ -1,4 +1,4 @@
-// pour différancier la page confirmation et panier
+
 const page = document.location.href;
 //----------------------------------------------------------------
 // Récupération des produits de l'api
@@ -53,13 +53,23 @@ let panier = JSON.parse(localStorage.getItem("panierStocké"));
     document.querySelector("h1").innerHTML =
       "Vous n'avez pas d'article dans votre panier";
   }
-  // reste à l'écoute grâce aux fonctions suivantes pour modifier l'affichage
+  // fonctions suivantes pour modifier l'affichage
+  
   modifQuantité();
   suppression();
 }
+
+
+
+
+
 //--------------------------------------------------------------
 //Fonction d'affichage d'un panier (tableau)
 //--------------------------------------------------------------
+
+
+
+
 function affiche(indexé) {
   // on déclare et on pointe la zone d'affichage
   let zonePanier = document.querySelector("#cart__items");
@@ -113,6 +123,7 @@ function modifQuantité() {
           // on met à jour le dataset quantité
           cart.dataset.quantité = eq.target.value;
           // on joue la fonction pour actualiser les données
+
           totalProduit();
         }
     });
@@ -142,7 +153,7 @@ function suppression() {
           //suppression de 1 élément à l'indice num
           nouveauPanier.splice(num, 1);
           //affichage informatif
-          if (nouveauPanier && nouveauPanier.length == 0) {
+          if (nouveauPanier && nouveauPanier.length ==0) {
             // si il n'y a pas de panier on créait un H1 informatif et quantité appropriées
             document.querySelector("#totalQuantity").innerHTML = "0";
             document.querySelector("#totalPrice").innerHTML = "0";
@@ -187,26 +198,20 @@ function totalProduit() {
 if (page.match("cart")) {
   var contactClient = {};
   localStorage.contactClient = JSON.stringify(contactClient);
-  // voir https://cheatography.com/davechild/cheat-sheets/regular-expressions/
-  /* regex email stackoverflow (?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]) */
-  /* équivalent en javascript à  	
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ */
-  // équivalent pour w3c /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-  // on pointe des éléments input, on attribut à certains la même classe, ils régiront pareil aux différantes regex
-  // on pointe les input nom prénom et ville
+  
   var prenom = document.querySelector("#firstName");
   prenom.classList.add("regex_texte");
   var nom = document.querySelector("#lastName");
   nom.classList.add("regex_texte");
   var ville = document.querySelector("#city");
   ville.classList.add("regex_texte");
-  // on pointe l'input adresse
+  //  pointe l'input adresse
   var adresse = document.querySelector("#address");
   adresse.classList.add("regex_adresse");
-  // on pointe l'input email
+  // pointe l'input email
   var email = document.querySelector("#email");
   email.classList.add("regex_email");
-  // on pointe les élément qui ont la classe .regex_texte
+  //  pointe les élément qui ont la classe .regex_texte
   var regexTexte = document.querySelectorAll(".regex_texte");
   // modification du type de l'input type email à text à cause d'un comportement de l'espace blanc non voulu vis à vis de la regex 
   document.querySelector("#email").setAttribute("type", "text");
@@ -433,6 +438,7 @@ let contactRef;
 let commandeFinale;
 function paquet() {
   contactRef = JSON.parse(localStorage.getItem("contactClient"));
+  console.log ("contactClient")
   // définition de l'objet commande
   commandeFinale = {
     contact: {
@@ -451,11 +457,13 @@ function paquet() {
 function envoiPaquet() {
   tableauId();
   paquet();
+  
   // vision sur le paquet que l'on veut envoyer
   console.log(commandeFinale);
   let somme = contactRef.regexNormal + contactRef.regexAdresse + contactRef.regexEmail;
+
   // si le panierId contient des articles et que le clic est autorisé
-  if (panierId.length != 0 && somme === 5) {
+  if (panierId.length >0) {
     // envoi à la ressource api
     fetch("http://localhost:3000/api/products/order", {
       method: "POST",
@@ -467,8 +475,9 @@ function envoiPaquet() {
     })
       .then((res) => res.json())
       .then((data) => {
-        // envoyé à la page confirmation, autre écriture de la valeur "./confirmation.html?commande=${data.orderId}"
-        window.location.href = `/front/html/confirmation.html?commande=${data.orderId}`;
+          const orderId = data.orderId
+          window.location.href = `/front/html/confirmation.html?orderId=${data.orderId}`;
+      
       })
       .catch(function (err) {
         console.log(err);
@@ -476,21 +485,32 @@ function envoiPaquet() {
       });
   }
 }
+
+
+
+/*
 //------------------------------------------------------------
 // fonction affichage autoinvoquée du numéro de commande et vide du storage lorsque l'on est sur la page confirmation
 //------------------------------------------------------------
 (function Commande() {
-  if (page.match("confirmation")) {
-    sessionStorage.clear();
-    localStorage.clear();
+if (page.match("confirmation")) {
+    //sessionStorage.clear();
+    //localStorage.clear();
     // valeur du numero de commande
-    let numCom = new URLSearchParams(document.location.search).get("commande");
-    // merci et mise en page
-    document.querySelector("#orderId").innerHTML = `<br>${numCom}<br>Merci pour votre achat`;
-    console.log("valeur de l'orderId venant de l'url: " + numCom);
+    const params = new URLSearchParams(document.location.search);
+  const id = params.get("order");
+  
+  const orderUrl = new URL(window.location.href).searchParams.get("orderId")
+  let numberOrder = document.getElementById("orderId")
+  numberOrder.innerHTML = orderUrl
+  console.log(orderUrl); 
+    document.querySelector("#orderId").innerHTML = `<br>${id}<br>Merci pour votre achat`;
+    console.log("valeur de l'orderId venant de l'url: " + id);
     //réinitialisation du numero de commande
-    numCom = undefined;
-  } else {
+    id = undefined;
+  } 
+  else {
     console.log("sur page cart");
   }
 })();
+*/
